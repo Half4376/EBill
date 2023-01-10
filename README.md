@@ -6,7 +6,7 @@ a receipt.
 
 ## Setup
 
-Ensure you run the database schema.txt in your perfered SQL Server IDE.
+Ensure you run the database SQLQuery.txt in your perfered SQL Server IDE.
 
 Once you do, go to "Web.config" file at line 38, change "Data Source = " to your database name.
 
