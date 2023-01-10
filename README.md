@@ -8,7 +8,7 @@ a receipt.
 
 Ensure you run the database schema.txt in your perfered SQL Server IDE.
 
-Once you do, go to "Web.config" file at line 38, change "Data Source = " to your databse name.
+Once you do, go to "Web.config" file at line 38, change "Data Source = " to your database name.
 
 ## Running the Application
 
