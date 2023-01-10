@@ -1,0 +1,84 @@
+create database EBillDB;
+
+create table BillDetails (Id int primary key identity,
+CustomerName varchar(255), MobileNumber varchar(255),
+Address varchar(255), TotalAmount int);
+
+create table BillItems (Id int primary key identity,
+ProductName varchar(255), Price int, Quantity int,
+BillId int foreign key references BillDetails(Id));
+
+-- saving all bill details
+create procedure spt_saveEBillDetails
+@CustomerName varchar(255),
+@MobileNumber varchar(255),
+@Address varchar(255),
+@TotalAmount int,
+@Id int output -- this id will store in BillItems(BillId) table
+as
+begin
+insert into BillDetails(CustomerName, MobileNumber, Address, TotalAmount)
+values(@CustomerName, @MobileNumber, @Address, @TotalAmount);
+
+select @Id = SCOPE_IDENTITY(); -- it will return last inserted id
+end
+
+-- for getting all details
+create procedure spt_getAllEBillDetails
+as 
+begin
+select * from BillDetails;
+end
+
+-- for getting one record
+create procedure spt_getEBillDetails
+@Id int 
+as 
+begin
+select details.Id as 'BillId', details.CustomerName, details.MobileNumber, details.Address, details.TotalAmount,
+items.Id as 'ItemId', items.ProductName, items.Price, items.Quantity
+from BillDetails details inner join BillItems items
+on details.Id = items.BillId
+where details.Id = @Id;
+end
+
+select * from BillDetails;
+
+-----
+
+USE [EBillDB]
+GO
+
+/****** Object:  StoredProcedure [dbo].[spt_getEBillDetails]    Script Date: 2023-01-04 11:36:52 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER procedure [dbo].[spt_getEBillDetails]
+@Id int 
+as 
+begin
+select details.Id as 'BillId', details.CustomerName, details.MobileNumber, details.Address, details.TotalAmount,
+items.Id as 'ItemId', items.ProductName, items.Price, items.Quantity
+from BillDetails details inner join BillItems items
+on details.Id = items.BillId
+where details.Id = @Id;
+end
+GO
+
+
+---
+
+USE [EBillDB]
+GO
+
+DECLARE	@return_value int
+
+EXEC	@return_value = [dbo].[spt_getEBillDetails]
+		@Id = 1
+
+SELECT	'Return Value' = @return_value
+
+GO
